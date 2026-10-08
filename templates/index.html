@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Library Management System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>📚 Library Management System</h1>
+
+    <p class="subtitle">
+        Manage your books easily
+    </p>
+
+    <a href="/add" class="add-btn">➕ Add Book</a>
+
+    {% if books %}
+
+    <table>
+
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Action</th>
+        </tr>
+
+        {% for book in books %}
+
+        <tr>
+            <td>{{ book[0] }}</td>
+            <td>{{ book[1] }}</td>
+            <td>{{ book[2] }}</td>
+
+            <td>
+                <a href="/delete/{{ book[0] }}"
+                   class="delete-btn"
+                   onclick="return confirm('Are you sure you want to delete this book?');">
+                   Delete
+                </a>
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% else %}
+
+    <div class="empty-message">
+        <h3>📖 No books available</h3>
+        <p>Add your first book to the library.</p>
+    </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>
