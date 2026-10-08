@@ -23,8 +23,7 @@ def init_db():
         )
     """)
 
-    # If you already created the old books table,
-    # this checks whether "status" exists.
+    # Check status column
     cursor.execute("PRAGMA table_info(books)")
     columns = [column[1] for column in cursor.fetchall()]
 
@@ -34,12 +33,12 @@ def init_db():
             ADD COLUMN status TEXT DEFAULT 'Available'
         """)
 
-    # Users table for login
+    # Users table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS users(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE,
-            password TEXT
+            username TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL
         )
     """)
 
@@ -73,7 +72,7 @@ def login():
 
     if request.method == 'POST':
 
-        username = request.form['username']
+        username = request.form['username'].strip()
         password = request.form['password']
 
         conn = sqlite3.connect("library.db")
@@ -101,6 +100,76 @@ def login():
     )
 
 
+# ---------------- REGISTRATION ----------------
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+
+    error = None
+    success = None
+
+    if request.method == 'POST':
+
+        username = request.form['username'].strip()
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+
+        # Check empty fields
+        if not username or not password or not confirm_password:
+            error = "Please fill in all fields."
+
+        # Check username length
+        elif len(username) < 3:
+            error = "Username must contain at least 3 characters."
+
+        # Check password length
+        elif len(password) < 6:
+            error = "Password must contain at least 6 characters."
+
+        # Check password confirmation
+        elif password != confirm_password:
+            error = "Passwords do not match."
+
+        else:
+
+            conn = sqlite3.connect("library.db")
+            cursor = conn.cursor()
+
+            # Check existing username
+            cursor.execute(
+                "SELECT * FROM users WHERE username=?",
+                (username,)
+            )
+
+            existing_user = cursor.fetchone()
+
+            if existing_user:
+                error = "Username already exists."
+
+            else:
+
+                cursor.execute(
+                    """
+                    INSERT INTO users(username, password)
+                    VALUES (?, ?)
+                    """,
+                    (username, password)
+                )
+
+                conn.commit()
+                conn.close()
+
+                return redirect('/login')
+
+            conn.close()
+
+    return render_template(
+        "register.html",
+        error=error,
+        success=success
+    )
+
+
 # ---------------- LOGOUT ----------------
 
 @app.route('/logout')
@@ -116,7 +185,6 @@ def logout():
 @app.route('/')
 def index():
 
-    # User must login first
     if 'user' not in session:
         return redirect('/login')
 
@@ -247,7 +315,7 @@ def search_book():
 
     if request.method == 'POST':
 
-        keyword = request.form['keyword']
+        keyword = request.form['keyword'].strip()
 
         conn = sqlite3.connect("library.db")
         cursor = conn.cursor()

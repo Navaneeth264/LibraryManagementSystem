@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Library Login</title>
+    <title>Library Registration</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
@@ -11,10 +11,10 @@
 
 <div class="login-container">
 
-    <h1>📚 Library Login</h1>
+    <h1>📚 Create Account</h1>
 
     <p class="subtitle">
-        Login to manage the library
+        Register to manage the library
     </p>
 
 
@@ -26,7 +26,7 @@
 
 
     <form method="POST"
-          id="loginForm">
+          id="registerForm">
 
         <div class="form-group">
 
@@ -60,17 +60,33 @@
         </div>
 
 
+        <div class="form-group">
+
+            <label for="confirm_password">
+                Confirm Password
+            </label>
+
+            <input
+                type="password"
+                id="confirm_password"
+                name="confirm_password"
+                placeholder="Confirm password"
+                required>
+
+        </div>
+
+
         <button type="submit"
                 class="submit-btn">
-            🔐 Login
+            📝 Register
         </button>
 
     </form>
 
 
-    <a href="/register"
+    <a href="/login"
        class="back-btn">
-        📝 Create New Account
+        ← Already have an account? Login
     </a>
 
 </div>
