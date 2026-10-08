@@ -52,7 +52,7 @@ The system allows users to securely log in and manage library books. Users can a
 Library Management System/
 │
 ├── app.py
-├── library.db
+├── .gitignore
 ├── README.md
 ├── requirements.txt
 │
