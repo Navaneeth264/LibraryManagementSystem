@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,7 +18,23 @@
         Manage your books easily
     </p>
 
-    <a href="/add" class="add-btn">➕ Add Book</a>
+    <!-- Top Buttons -->
+    <div class="top-buttons">
+
+        <a href="/add" class="add-btn">
+            ➕ Add Book
+        </a>
+
+        <a href="/search" class="search-btn">
+            🔍 Search Book
+        </a>
+
+        <a href="/logout" class="logout-btn">
+            🚪 Logout
+        </a>
+
+    </div>
+
 
     {% if books %}
 
@@ -27,34 +44,110 @@
             <th>ID</th>
             <th>Title</th>
             <th>Author</th>
-            <th>Action</th>
+            <th>Status</th>
+            <th>Actions</th>
         </tr>
+
 
         {% for book in books %}
 
         <tr>
-            <td>{{ book[0] }}</td>
-            <td>{{ book[1] }}</td>
-            <td>{{ book[2] }}</td>
 
+            <!-- Book ID -->
             <td>
+                {{ book[0] }}
+            </td>
+
+
+            <!-- Book Title -->
+            <td>
+                {{ book[1] }}
+            </td>
+
+
+            <!-- Book Author -->
+            <td>
+                {{ book[2] }}
+            </td>
+
+
+            <!-- Book Status -->
+            <td>
+
+                {% if book[3] == 'Available' %}
+
+                    <span class="available">
+                        🟢 Available
+                    </span>
+
+                {% else %}
+
+                    <span class="issued">
+                        🔴 Issued
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+
+            <!-- Actions -->
+            <td>
+
+                <!-- Update -->
+                <a href="/update/{{ book[0] }}"
+                   class="update-btn">
+                    ✏️ Update
+                </a>
+
+
+                <!-- Issue / Return -->
+
+                {% if book[3] == 'Available' %}
+
+                    <a href="/issue/{{ book[0] }}"
+                       class="issue-btn"
+                       onclick="return confirm('Do you want to issue this book?');">
+                        📕 Issue
+                    </a>
+
+                {% else %}
+
+                    <a href="/return/{{ book[0] }}"
+                       class="return-btn"
+                       onclick="return confirm('Do you want to return this book?');">
+                        📗 Return
+                    </a>
+
+                {% endif %}
+
+
+                <!-- Delete -->
                 <a href="/delete/{{ book[0] }}"
                    class="delete-btn"
                    onclick="return confirm('Are you sure you want to delete this book?');">
-                   Delete
+                    🗑️ Delete
                 </a>
+
             </td>
+
         </tr>
 
         {% endfor %}
 
     </table>
 
+
     {% else %}
 
     <div class="empty-message">
+
         <h3>📖 No books available</h3>
-        <p>Add your first book to the library.</p>
+
+        <p>
+            Add your first book to the library.
+        </p>
+
     </div>
 
     {% endif %}
@@ -63,3 +156,4 @@
 
 </body>
 </html>
+```

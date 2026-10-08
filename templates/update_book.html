@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Add Book</title>
+    <title>Update Book</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
@@ -14,10 +14,10 @@
 
     <div class="form-container">
 
-        <h1>📚 Add Book</h1>
+        <h1>✏️ Update Book</h1>
 
         <p class="subtitle">
-            Add a new book to your library
+            Update the book details
         </p>
 
         <form method="POST">
@@ -32,7 +32,7 @@
                     type="text"
                     id="title"
                     name="title"
-                    placeholder="Enter book title"
+                    value="{{ book[1] }}"
                     required>
 
             </div>
@@ -48,14 +48,14 @@
                     type="text"
                     id="author"
                     name="author"
-                    placeholder="Enter author name"
+                    value="{{ book[2] }}"
                     required>
 
             </div>
 
 
             <button type="submit" class="submit-btn">
-                ➕ Add Book
+                💾 Update Book
             </button>
 
         </form>

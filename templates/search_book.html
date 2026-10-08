@@ -1,0 +1,118 @@
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Book</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🔍 Search Books</h1>
+
+    <p class="subtitle">
+        Search by book title or author
+    </p>
+
+
+    <div class="search-container">
+
+        <form method="POST" class="search-form">
+
+            <input
+                type="text"
+                name="keyword"
+                placeholder="Enter book title or author"
+                value="{{ keyword }}"
+                required>
+
+            <button type="submit">
+                🔍 Search
+            </button>
+
+        </form>
+
+
+        {% if books %}
+
+        <table>
+
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Status</th>
+            </tr>
+
+
+            {% for book in books %}
+
+            <tr>
+
+                <td>
+                    {{ book[0] }}
+                </td>
+
+                <td>
+                    {{ book[1] }}
+                </td>
+
+                <td>
+                    {{ book[2] }}
+                </td>
+
+                <td>
+
+                    {% if book[3] == 'Available' %}
+
+                        <span class="available">
+                            🟢 Available
+                        </span>
+
+                    {% else %}
+
+                        <span class="issued">
+                            🔴 Issued
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+
+        {% elif keyword %}
+
+        <div class="empty-message">
+
+            <h3>📖 No books found</h3>
+
+            <p>
+                No books match "{{ keyword }}".
+            </p>
+
+        </div>
+
+        {% endif %}
+
+
+        <a href="/" class="back-btn">
+            ← Back to Library
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>
+```
