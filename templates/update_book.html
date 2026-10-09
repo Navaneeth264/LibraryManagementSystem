@@ -1,7 +1,11 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Update Book</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Update Book - Library Management System</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
@@ -19,39 +23,39 @@
             Update the book details
         </p>
 
-        <form method="POST">
+        {% if error %}
+            <div class="login-error">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <form method="POST"
+              action="{{ url_for('update_book', id=book['id']) }}"
+              id="updateBookForm">
 
             <div class="form-group">
-
-                <label for="title">
-                    Book Title
-                </label>
+                <label for="title">Book Title</label>
 
                 <input
                     type="text"
                     id="title"
                     name="title"
-                    value="{{ book[1] }}"
+                    value="{{ book['title'] }}"
+                    maxlength="200"
                     required>
-
             </div>
 
-
             <div class="form-group">
-
-                <label for="author">
-                    Author
-                </label>
+                <label for="author">Author</label>
 
                 <input
                     type="text"
                     id="author"
                     name="author"
-                    value="{{ book[2] }}"
+                    value="{{ book['author'] }}"
+                    maxlength="150"
                     required>
-
             </div>
-
 
             <button type="submit" class="submit-btn">
                 💾 Update Book
@@ -59,8 +63,7 @@
 
         </form>
 
-
-        <a href="/" class="back-btn">
+        <a href="{{ url_for('index') }}" class="back-btn">
             ← Back to Library
         </a>
 

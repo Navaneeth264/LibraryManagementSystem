@@ -1,7 +1,11 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Library Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Library Management - Login</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
@@ -14,9 +18,8 @@
     <h1>📚 Library Login</h1>
 
     <p class="subtitle">
-        Login to manage the library
+        Login to access the library
     </p>
-
 
     {% if error %}
         <div class="login-error">
@@ -24,57 +27,45 @@
         </div>
     {% endif %}
 
-
     <form method="POST"
+          action="{{ url_for('login') }}"
           id="loginForm">
 
         <div class="form-group">
-
-            <label for="username">
-                Username
-            </label>
+            <label for="username">Username</label>
 
             <input
                 type="text"
                 id="username"
                 name="username"
                 placeholder="Enter username"
+                autocomplete="username"
                 required>
-
         </div>
 
-
         <div class="form-group">
-
-            <label for="password">
-                Password
-            </label>
+            <label for="password">Password</label>
 
             <input
                 type="password"
                 id="password"
                 name="password"
                 placeholder="Enter password"
+                autocomplete="current-password"
                 required>
-
         </div>
 
-
-        <button type="submit"
-                class="submit-btn">
+        <button type="submit" class="submit-btn">
             🔐 Login
         </button>
 
     </form>
 
-
-    <a href="/register"
-       class="back-btn">
+    <a href="{{ url_for('register') }}" class="back-btn">
         📝 Create New Account
     </a>
 
 </div>
-
 
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 

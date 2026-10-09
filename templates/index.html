@@ -1,6 +1,9 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library Management System</title>
 
     <link rel="stylesheet"
@@ -13,138 +16,133 @@
 
     <h1>📚 Library Management System</h1>
 
-    <p class="subtitle">
-        Manage your books easily
+    <p class="subtitle">Manage your books easily</p>
+
+    <p>
+        Welcome, {{ username }}!
+        {% if role == 'admin' %}
+            <strong>(Admin)</strong>
+        {% else %}
+            <strong>(Public User)</strong>
+        {% endif %}
     </p>
 
-
-    <!-- Top Buttons -->
     <div class="top-buttons">
 
-        <a href="/add" class="add-btn">
-            ➕ Add Book
-        </a>
+        {% if role == 'admin' %}
+            <a href="{{ url_for('add_book') }}" class="add-btn">
+                ➕ Add Book
+            </a>
+        {% endif %}
 
-        <a href="/search" class="search-btn">
+        <a href="{{ url_for('search_book') }}" class="search-btn">
             🔍 Search Book
         </a>
 
-        <a href="/logout" class="logout-btn">
+        <a href="{{ url_for('logout') }}" class="logout-btn">
             🚪 Logout
         </a>
 
     </div>
 
-
     {% if books %}
 
     <table>
-
         <tr>
             <th>ID</th>
             <th>Title</th>
             <th>Author</th>
             <th>Status</th>
-            <th>Actions</th>
+
+            {% if role == 'admin' %}
+                <th>Actions</th>
+            {% endif %}
         </tr>
 
-
         {% for book in books %}
-
         <tr>
 
-            <!-- Book ID -->
+            <td>{{ book['id'] }}</td>
+            <td>{{ book['title'] }}</td>
+            <td>{{ book['author'] }}</td>
+
             <td>
-                {{ book[0] }}
-            </td>
-
-
-            <!-- Book Title -->
-            <td>
-                {{ book[1] }}
-            </td>
-
-
-            <!-- Book Author -->
-            <td>
-                {{ book[2] }}
-            </td>
-
-
-            <!-- Book Status -->
-            <td>
-
-                {% if book[3] == 'Available' %}
-
-                    <span class="available">
-                        🟢 Available
-                    </span>
-
+                {% if book['status'] == 'Available' %}
+                    <span class="available">🟢 Available</span>
                 {% else %}
-
-                    <span class="issued">
-                        🔴 Issued
-                    </span>
-
+                    <span class="issued">🔴 Issued</span>
                 {% endif %}
-
             </td>
 
-
-            <!-- Actions -->
+            {% if role == 'admin' %}
             <td>
 
-                <!-- Update -->
-                <a href="/update/{{ book[0] }}"
+                <!-- Update Book -->
+                <a href="{{ url_for('update_book', id=book['id']) }}"
                    class="update-btn">
                     ✏️ Update
                 </a>
 
+                <!-- Issue Book -->
+                {% if book['status'] == 'Available' %}
 
-                <!-- Issue / Return -->
+                    <form action="{{ url_for('issue_book', id=book['id']) }}"
+                          method="POST"
+                          style="display:inline;"
+                          onsubmit="return confirm('Are you sure you want to issue this book?');">
 
-                {% if book[3] == 'Available' %}
+                        <button type="submit" class="issue-btn">
+                            📕 Issue
+                        </button>
 
-                    <a href="/issue/{{ book[0] }}"
-                       class="issue-btn">
-                        📕 Issue
-                    </a>
+                    </form>
 
                 {% else %}
 
-                    <a href="/return/{{ book[0] }}"
-                       class="return-btn">
-                        📗 Return
-                    </a>
+                    <!-- Return Book -->
+                    <form action="{{ url_for('return_book', id=book['id']) }}"
+                          method="POST"
+                          style="display:inline;"
+                          onsubmit="return confirm('Are you sure you want to return this book?');">
+
+                        <button type="submit" class="return-btn">
+                            📗 Return
+                        </button>
+
+                    </form>
 
                 {% endif %}
 
+                <!-- Delete Book -->
+                <form action="{{ url_for('delete_book', id=book['id']) }}"
+                      method="POST"
+                      style="display:inline;"
+                      onsubmit="return confirm('Are you sure you want to delete this book?');">
 
-                <!-- Delete -->
-                <a href="/delete/{{ book[0] }}"
-                   class="delete-btn">
-                    🗑️ Delete
-                </a>
+                    <button type="submit" class="delete-btn">
+                        🗑️ Delete
+                    </button>
+
+                </form>
 
             </td>
+            {% endif %}
 
         </tr>
-
         {% endfor %}
 
     </table>
 
-
     {% else %}
 
     <div class="empty-message">
-
         <h3>📖 No books available</h3>
 
-        <p>
-            Add your first book to the library.
-        </p>
-
+        {% if role == 'admin' %}
+            <p>Add your first book to the library.</p>
+        {% else %}
+            <p>No books have been added to the library yet.</p>
+        {% endif %}
     </div>
 
     {% endif %}

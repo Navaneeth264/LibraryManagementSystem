@@ -1,7 +1,11 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Search Book</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Search Books - Library Management System</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
@@ -17,16 +21,18 @@
         Search by book title or author
     </p>
 
-
     <div class="search-container">
 
-        <form method="POST" class="search-form">
+        <form method="POST"
+              action="{{ url_for('search_book') }}"
+              class="search-form">
 
             <input
                 type="text"
                 name="keyword"
                 placeholder="Enter book title or author"
                 value="{{ keyword }}"
+                maxlength="200"
                 required>
 
             <button type="submit">
@@ -35,11 +41,9 @@
 
         </form>
 
-
         {% if books %}
 
         <table>
-
             <tr>
                 <th>ID</th>
                 <th>Title</th>
@@ -47,64 +51,38 @@
                 <th>Status</th>
             </tr>
 
-
             {% for book in books %}
-
             <tr>
+                <td>{{ book['id'] }}</td>
+                <td>{{ book['title'] }}</td>
+                <td>{{ book['author'] }}</td>
 
                 <td>
-                    {{ book[0] }}
-                </td>
-
-                <td>
-                    {{ book[1] }}
-                </td>
-
-                <td>
-                    {{ book[2] }}
-                </td>
-
-                <td>
-
-                    {% if book[3] == 'Available' %}
-
+                    {% if book['status'] == 'Available' %}
                         <span class="available">
                             🟢 Available
                         </span>
-
                     {% else %}
-
                         <span class="issued">
                             🔴 Issued
                         </span>
-
                     {% endif %}
-
                 </td>
-
             </tr>
-
             {% endfor %}
 
         </table>
 
-
         {% elif keyword %}
 
         <div class="empty-message">
-
             <h3>📖 No books found</h3>
-
-            <p>
-                No books match "{{ keyword }}".
-            </p>
-
+            <p>No books match "{{ keyword }}".</p>
         </div>
 
         {% endif %}
 
-
-        <a href="/" class="back-btn">
+        <a href="{{ url_for('index') }}" class="back-btn">
             ← Back to Library
         </a>
 

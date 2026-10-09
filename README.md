@@ -58,6 +58,7 @@ Library Management System/
 │
 ├── templates/
 │   ├── login.html
+│   ├── register.html 
 │   ├── index.html
 │   ├── add_book.html
 │   ├── search_book.html
